@@ -6,17 +6,22 @@
 
 from flask import Flask
 from config import Config
+from .api.routes import api
 from .site.routes import site
 from .authentication.routes import auth
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db as root_db, login_manager, ma
+from flask_cors import CORS
+from helpers import JSONEncoder
 
 # the period before site allows us to look around in our site folder - we locate the site folder that way and then we're looking inside of it for an object called 'site'
 
 app = Flask(__name__)
 
+# CORS is used to avoid/combat Cross-Site Request Forgery, or CSRF, which is a common way hackers access our data
+CORS(app)
 # The above makes sure that Flask can run, but we haven't given it any data yet.
 # To do this, we're going to use our structure to: 
 # SEPARATE CONCERNS - this will mean that each folder and file will have a separate purpose
@@ -34,6 +39,11 @@ app.register_blueprint(site)
 
 # We also need to connect the authentication content:
 app.register_blueprint(auth)
+
+# We need to connect the api content:
+app.register_blueprint(api)
+
+app.json_encoder = JSONEncoder
 
 # We need to write the configuration:
 app.config.from_object(Config)
