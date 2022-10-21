@@ -7,6 +7,11 @@
 from flask import Flask
 from config import Config
 from .site.routes import site
+from .authentication.routes import auth
+
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from models import db as root_db, login_manager, ma
 
 # the period before site allows us to look around in our site folder - we locate the site folder that way and then we're looking inside of it for an object called 'site'
 
@@ -26,5 +31,15 @@ app.register_blueprint(site)
 
 # we will need some other data to talk to the browser before we can run the app, so we'll need to configure some settings for the browser and our command line interface to talk back and forth about what to expect from our app (this is done in config.py)
 
-# Next we need to actually write the configuration:
+
+# We also need to connect the authentication content:
+app.register_blueprint(auth)
+
+# We need to write the configuration:
 app.config.from_object(Config)
+
+# We need to initiate the database with the app and run the login manager:
+root_db.init_app(app)
+login_manager.init_app(app)
+ma.init_app(app)
+migrate = Migrate(app, root_db)
