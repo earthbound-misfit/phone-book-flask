@@ -1,0 +1,1 @@
+# helps make sure users can log in correctly and that they are actually authorized to access our api data

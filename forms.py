@@ -1,0 +1,1 @@
+# ensures users are giving us the right data when they're logging in - valid email addres, for example

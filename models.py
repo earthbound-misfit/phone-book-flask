@@ -1,0 +1,1 @@
+# these are presets for creating our databases so we don't have to write SQL tables and queries, we'll automate that stuff instead
